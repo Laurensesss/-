@@ -11,8 +11,6 @@
 
 int main(int argc, const char * argv[]) {
   
-  cout << -2/10 << endl;
-  
   HugeNumber a(true);
   a.printNumber();
   cout << a.getLength() << endl;

@@ -81,54 +81,6 @@ int HugeNumber::getLength() {
 // MARK: - Operations Override
 
 HugeNumber HugeNumber::operator+(HugeNumber B) {
-  // FIXME: - 减法问题
-//  
-//  // + +
-//  if (num[length-1] > 0 && B.num[B.length-1] > 0) {
-//    
-//  }
-//  
-//  // + -
-//  if (num[length-1] > 0 && B.num[B.length-1] < 0) {
-//    for (int i = 0; i<B.length-1; i++) {
-//      B.num[i] = -B.num[i];
-//    }
-//  }
-//  
-//  // - +
-//  if (num[length-1] < 0 && B.num[B.length-1] > 0) {
-//    for (int i = 0; i<length-1; i++) {
-//      num[i] = -num[i];
-//    }
-//  }
-//  
-//  // - -
-//  if (num[length-1] < 0 && B.num[B.length-1] < 0) {
-//    num[length-1] = -num[length-1];
-//    B.num[B.length-1] = -B.num[B.length-1];
-//    // FIXME: - 修改正负性需变回
-//  }
-//  
-//  if (B.length > length || (B.length == length &&
-//                            abs(B.num[B.length-1]) > abs(num[length-1])
-//                            )) {
-//    for (int i = 0; i<length; i++) {
-//      num[i] = -num[i];
-//    }
-//    for (int j = 0; j<B.length; j++) {
-//      B.num[j] = -B.num[j];
-//    }
-//    HugeNumber temp(false);
-//    
-//    temp = B;
-//    B = *this;
-//    *this = temp;
-//  }
-//  
-  // 减法设置结束
-  
-  
-  
   /**
    1、无负数，正常加法；
    2、如果两个数之中有一个为负数，且是较大的那个数，那么交换两个数的正负值，在运算结束之后再改变正负号；
@@ -139,28 +91,76 @@ HugeNumber HugeNumber::operator+(HugeNumber B) {
   // 1省略，2、有一个为负数，且较大
   // 先假设为第二个操作数
   if (num[length-1] > 0 && B.num[B.length-1] < 0) {
-    if ( (B.length == length
-         && -B.num[B.length-1] > num[length-1] )
-         || B.length > length) {
+    // 长度更高
+    if (B.length > length) {
       B.num[B.length-1] = -B.num[B.length-1];
       num[length-1] = -num[length-1];
+    }
+    
+    // 长度相等
+    if (B.length == length) {
+      
+      if (-B.num[length-1] > num[length-1]) {
+        B.num[B.length-1] = -B.num[B.length-1];
+        num[length-1] = -num[length-1];
+      } else if(-B.num[length-1] == num[length-1]) {
+        for (int i = 0; i < length-1; i++) {
+          
+          if (B.num[length-i-1] < num[length-i-1]) {
+            break;
+          } else if(B.num[length-i-1] > num[length-i-1]) {
+            B.num[B.length-1] = -B.num[B.length-1];
+            num[length-1] = -num[length-1];
+            break;
+          } else {
+            continue;
+          }
+          
+        }
+      }
+      
     }
   }
   
   // 再假设为第一个操作数
   if (num[length-1] < 0 && B.num[B.length-1] > 0) {
-    if ( (B.length == length
-          && B.num[B.length-1] < -num[length-1] )
-        || B.length < length) {
+    // 长度更高
+    if (B.length < length) {
       B.num[B.length-1] = -B.num[B.length-1];
       num[length-1] = -num[length-1];
+    }
+    
+    // 长度相等
+    if (B.length == length) {
+      
+      if (B.num[length-1] < -num[length-1]) {
+        B.num[B.length-1] = -B.num[B.length-1];
+        num[length-1] = -num[length-1];
+      } else if(B.num[length-1] == -num[length-1]) {
+        for (int i = 0; i < length-1; i++) {
+          
+          if (B.num[length-i-1] > num[length-i-1]) {
+            break;
+          } else if(B.num[length-i-1] < num[length-i-1]) {
+            B.num[B.length-1] = -B.num[B.length-1];
+            num[length-1] = -num[length-1];
+            break;
+          } else {
+            continue;
+          }
+          
+        }
+      }
+      
     }
   }
   
   // 3、两个负数
+  bool isTwoNegative = false;
   if (num[length-1] < 0 && B.num[B.length-1] < 0) {
     B.num[B.length-1] = -B.num[B.length-1];
     num[length-1] = -num[length-1];
+    isTwoNegative = true;
   }
   
   // 4、把每一位都变成负数
@@ -179,22 +179,21 @@ HugeNumber HugeNumber::operator+(HugeNumber B) {
   
   int i = 0;
   HugeNumber C(false);
-  int n = this->length, m = B.length;
+  int n = length, m = B.length;
   
   for ( ; i<n && i<m; i++) {
-    C.num[i] = (this->num[i] + B.num[i] + flag) % 10;
-    flag = (this->num[i] + B.num[i] + flag) / 10;
-    
+    C.num[i] = (num[i] + B.num[i] + flag) > 0 ? (num[i] + B.num[i] + flag) % 10 : (num[i] + B.num[i] + flag + 10) % 10;
+    flag = (num[i] + B.num[i] + flag) > 0 ? (num[i] + B.num[i] + flag) / 10 : -1;
   }
   
   for ( ; i<n; i++) {
-    C.num[i] = (this->num[i] + flag) % 10;
-    flag = (this->num[i] + flag) / 10;
+    C.num[i] = (num[i] + flag) > 0 ? (num[i] + flag) % 10 : (num[i] + flag + 10) % 10;
+    flag = (num[i] + flag) > 0 ? (num[i] + flag) / 10 : -1;
   }
   
   for ( ; i<m; i++) {
-    C.num[i] = (B.num[i] + flag) % 10;
-    flag = (B.num[i] + flag) / 10;
+    C.num[i] = (B.num[i] + flag) > 0 ? (B.num[i] + flag) % 10 : (B.num[i] + flag + 10) % 10;
+    flag = (B.num[i] + flag) > 0 ? (B.num[i] + flag) / 10 : -1;
   }
   
   C.length = max(m, n) + flag;
@@ -205,6 +204,10 @@ HugeNumber HugeNumber::operator+(HugeNumber B) {
   } else {
     cout << "Pass the top of 100-digit integer, the past part has been cut." << endl;
     C.length = Max;
+  }
+  
+  if (num[length-1] < 0 || B.num[B.length-1] < 0 || isTwoNegative) {
+    C.num[C.length-1] = -C.num[C.length-1];
   }
   
   return C;
