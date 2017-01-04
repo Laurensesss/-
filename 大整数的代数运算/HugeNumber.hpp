@@ -18,11 +18,12 @@ const int Max = 100;
 
 class HugeNumber {
 private:
-  static int flag;
+//  static int flag;
   int length = 0;
   int num[Max];
   void setLength();
   int convertStringIntoInt(string, int);
+  int getTheBigger(HugeNumber, HugeNumber);
 public:
   HugeNumber(bool);
   void inputNumber();

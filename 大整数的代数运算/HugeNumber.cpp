@@ -8,7 +8,7 @@
 
 #include "HugeNumber.hpp"
 
-int HugeNumber::flag = 0;
+//int HugeNumber::flag = 0;
 
 
 // MARK: - Private Functions
@@ -29,6 +29,33 @@ int HugeNumber::convertStringIntoInt(string str, int index) {
   }
   
   return num;
+}
+
+int HugeNumber::getTheBigger(HugeNumber A, HugeNumber B) {
+  int returnValue = 2;
+  
+  // 先判断长度；
+  if (A.length > B.length) {
+    returnValue = 0;
+  } else if (A.length < B.length) {
+    returnValue = 1;
+  } else {
+    
+    for (int i = 0; i < A.length; i++) {
+      if (A.num[length-i-1] > B.num[length-i-1]) {
+        returnValue = 0;
+        break;
+      } else if (A.num[length-i-1] < B.num[length-i-1]) {
+        returnValue = 1;
+        break;
+      } else {
+        continue;
+      }
+    }
+    
+  }
+  
+  return returnValue;
 }
 
 // MARK: - Public Functions
@@ -88,72 +115,28 @@ HugeNumber HugeNumber::operator+(HugeNumber B) {
    4、一旦为负数，必须将每一位的数都变成负数。
    */
   
+  
   // 1省略，2、有一个为负数，且较大
   // 先假设为第二个操作数
   if (num[length-1] > 0 && B.num[B.length-1] < 0) {
-    // 长度更高
-    if (B.length > length) {
+    HugeNumber temp = B;
+    temp.num[temp.length-1] = -temp.num[temp.length-1];
+    if (getTheBigger(*this, temp) == 1) {
       B.num[B.length-1] = -B.num[B.length-1];
       num[length-1] = -num[length-1];
-    }
-    
-    // 长度相等
-    if (B.length == length) {
-      
-      if (-B.num[length-1] > num[length-1]) {
-        B.num[B.length-1] = -B.num[B.length-1];
-        num[length-1] = -num[length-1];
-      } else if(-B.num[length-1] == num[length-1]) {
-        for (int i = 0; i < length-1; i++) {
-          
-          if (B.num[length-i-1] < num[length-i-1]) {
-            break;
-          } else if(B.num[length-i-1] > num[length-i-1]) {
-            B.num[B.length-1] = -B.num[B.length-1];
-            num[length-1] = -num[length-1];
-            break;
-          } else {
-            continue;
-          }
-          
-        }
-      }
-      
     }
   }
   
   // 再假设为第一个操作数
   if (num[length-1] < 0 && B.num[B.length-1] > 0) {
-    // 长度更高
-    if (B.length < length) {
+    HugeNumber temp = *this;
+    temp.num[temp.length-1] = -temp.num[temp.length-1];
+    if (getTheBigger(temp, B) == 0) {
       B.num[B.length-1] = -B.num[B.length-1];
       num[length-1] = -num[length-1];
     }
-    
-    // 长度相等
-    if (B.length == length) {
-      
-      if (B.num[length-1] < -num[length-1]) {
-        B.num[B.length-1] = -B.num[B.length-1];
-        num[length-1] = -num[length-1];
-      } else if(B.num[length-1] == -num[length-1]) {
-        for (int i = 0; i < length-1; i++) {
-          
-          if (B.num[length-i-1] > num[length-i-1]) {
-            break;
-          } else if(B.num[length-i-1] < num[length-i-1]) {
-            B.num[B.length-1] = -B.num[B.length-1];
-            num[length-1] = -num[length-1];
-            break;
-          } else {
-            continue;
-          }
-          
-        }
-      }
-      
-    }
   }
+
   
   // 3、两个负数
   bool isTwoNegative = false;
@@ -178,22 +161,23 @@ HugeNumber HugeNumber::operator+(HugeNumber B) {
   
   
   int i = 0;
+  int flag = 0;
   HugeNumber C(false);
   int n = length, m = B.length;
   
   for ( ; i<n && i<m; i++) {
     C.num[i] = (num[i] + B.num[i] + flag) > 0 ? (num[i] + B.num[i] + flag) % 10 : (num[i] + B.num[i] + flag + 10) % 10;
-    flag = (num[i] + B.num[i] + flag) > 0 ? (num[i] + B.num[i] + flag) / 10 : -1;
+    flag = (num[i] + B.num[i] + flag) > 0 ? (num[i] + B.num[i] + flag) / 10 : -(num[i] + B.num[i] + flag) / 10;
   }
   
   for ( ; i<n; i++) {
     C.num[i] = (num[i] + flag) > 0 ? (num[i] + flag) % 10 : (num[i] + flag + 10) % 10;
-    flag = (num[i] + flag) > 0 ? (num[i] + flag) / 10 : -1;
+    flag = (num[i] + flag) > 0 ? (num[i] + flag) / 10 : -(num[i] + flag) / 10;
   }
   
   for ( ; i<m; i++) {
     C.num[i] = (B.num[i] + flag) > 0 ? (B.num[i] + flag) % 10 : (B.num[i] + flag + 10) % 10;
-    flag = (B.num[i] + flag) > 0 ? (B.num[i] + flag) / 10 : -1;
+    flag = (B.num[i] + flag) > 0 ? (B.num[i] + flag) / 10 : -(B.num[i] + flag) / 10;
   }
   
   C.length = max(m, n) + flag;
