@@ -7,9 +7,22 @@
 //
 
 #include <iostream>
+#include "HugeNumber.hpp"
 
 int main(int argc, const char * argv[]) {
-  // insert code here...
-  std::cout << "Hello, World!\n";
-    return 0;
+  
+  cout << -2/10 << endl;
+  
+  HugeNumber a(true);
+  a.printNumber();
+  cout << a.getLength() << endl;
+  HugeNumber b(true);
+  b.printNumber();
+  cout << b.getLength() << endl;
+  HugeNumber c(false);
+  c = a + b;
+  c.printNumber();
+  cout << c.getLength() << endl;
+  
+  return 0;
 }

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		47DB40241E1B36CB0057766E /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47DB40231E1B36CB0057766E /* main.cpp */; };
+		47DB402C1E1B37070057766E /* HugeNumber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47DB402A1E1B37070057766E /* HugeNumber.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +26,8 @@
 /* Begin PBXFileReference section */
 		47DB40201E1B36CB0057766E /* 大整数的代数运算 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "大整数的代数运算"; sourceTree = BUILT_PRODUCTS_DIR; };
 		47DB40231E1B36CB0057766E /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		47DB402A1E1B37070057766E /* HugeNumber.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HugeNumber.cpp; sourceTree = "<group>"; };
+		47DB402B1E1B37070057766E /* HugeNumber.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = HugeNumber.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +61,8 @@
 			isa = PBXGroup;
 			children = (
 				47DB40231E1B36CB0057766E /* main.cpp */,
+				47DB402A1E1B37070057766E /* HugeNumber.cpp */,
+				47DB402B1E1B37070057766E /* HugeNumber.hpp */,
 			);
 			path = "大整数的代数运算";
 			sourceTree = "<group>";
@@ -121,6 +126,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				47DB40241E1B36CB0057766E /* main.cpp in Sources */,
+				47DB402C1E1B37070057766E /* HugeNumber.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
